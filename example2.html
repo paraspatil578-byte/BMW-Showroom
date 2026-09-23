@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <style>
+       body {
+           background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+           min-height: 100vh;
+       }
+       .navbar {
+           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+           padding: 15px 0;
+           box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+           backdrop-filter: blur(10px);
+       }
+       .navbar-brand img {
+           transition: transform 0.3s ease;
+           filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+       }
+       .navbar-brand img:hover {
+           transform: scale(1.1) rotate(5deg);
+       }
+       .nav-link {
+           transition: all 0.3s ease;
+           position: relative;
+           color: white !important;
+           font-weight: 500;
+           margin: 0 10px;
+           padding: 8px 15px !important;
+           border-radius: 25px;
+       }
+       .nav-link:hover {
+           background: rgba(255,255,255,0.2);
+           color: white !important;
+       }
+       .nav-link.active {
+           background: rgba(255,255,255,0.3);
+           color: white !important;
+       }
+       .nav-link::after {
+           content: '';
+           position: absolute;
+           width: 0;
+           height: 2px;
+           bottom: 5px;
+           left: 50%;
+           background: white;
+           transition: all 0.3s ease;
+           transform: translateX(-50%);
+       }
+       .nav-link:hover::after {
+           width: 60%;
+       }
+       .navbar-toggler {
+           border: 2px solid rgba(255,255,255,0.5);
+           padding: 8px 12px;
+       }
+       .navbar-toggler:focus {
+           box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.25);
+       }
+       .navbar-toggler-icon {
+           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+       }
+       .carousel-item img {
+           object-fit: cover;
+           filter: brightness(0.9);
+       }
+       .card {
+           transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+           border: none;
+           border-radius: 15px;
+           overflow: hidden;
+           background: white;
+       }
+       .card:hover {
+           transform: translateY(-10px) scale(1.02);
+           box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+       }
+       .card-img-top {
+           transition: transform 0.5s ease;
+           height: 200px;
+           object-fit: cover;
+       }
+       .card:hover .card-img-top {
+           transform: scale(1.1);
+       }
+       .card-body {
+           background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+       }
+       .card-title {
+           color: #1a1a2e;
+           font-weight: 700;
+           text-transform: uppercase;
+           letter-spacing: 1px;
+       }
+       .price-tag {
+           font-size: 1.5rem;
+           font-weight: bold;
+           background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
+       }
+       .btn-primary {
+           background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+           border: none;
+           padding: 10px 25px;
+           border-radius: 25px;
+           transition: all 0.3s ease;
+           position: relative;
+           overflow: hidden;
+       }
+       .btn-primary::before {
+           content: '';
+           position: absolute;
+           top: 0;
+           left: -100%;
+           width: 100%;
+           height: 100%;
+           background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+           transition: left 0.5s ease;
+       }
+       .btn-primary:hover::before {
+           left: 100%;
+       }
+       .btn-primary:hover {
+           transform: translateY(-3px);
+           box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+       }
+       .btn-success {
+           background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+           border: none;
+           padding: 10px 25px;
+           border-radius: 25px;
+           transition: all 0.3s ease;
+       }
+       .btn-success:hover {
+           transform: translateY(-3px);
+           box-shadow: 0 10px 20px rgba(17, 153, 142, 0.4);
+       }
+       .cart-icon {
+           position: relative;
+           cursor: pointer;
+           transition: all 0.3s ease;
+           background: rgba(255,255,255,0.2);
+           padding: 8px 15px;
+           border-radius: 25px;
+           margin-left: 15px;
+       }
+       .cart-icon:hover {
+           background: rgba(255,255,255,0.3);
+           transform: scale(1.1);
+       }
+       .cart-icon i {
+           color: white !important;
+       }
+       .cart-badge {
+           position: absolute;
+           top: -5px;
+           right: -5px;
+           background: #ff4757;
+           color: white;
+           border-radius: 50%;
+           width: 22px;
+           height: 22px;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 11px;
+           font-weight: bold;
+           border: 2px solid white;
+           animation: pulse 2s infinite;
+       }
+       @keyframes pulse {
+           0%, 100% { transform: scale(1); }
+           50% { transform: scale(1.1); }
+       }
+       .form-control:focus {
+           box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+           border-color: #667eea;
+       }
+       .input-group .btn-light:hover {
+           background: #e9ecef;
+       }
+       .container {
+           background: rgba(255, 255, 255, 0.98);
+           border-radius: 20px;
+           padding: 30px;
+           margin-top: 30px;
+           margin-bottom: 30px;
+           box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+       }
+       .container-fluid {
+           background: rgba(255, 255, 255, 0.98);
+           border-radius: 20px;
+           padding: 30px;
+           margin: 30px 15px;
+           box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+       }
+       h1, h2 {
+           color: #1a1a2e;
+           font-weight: 700;
+       }
+       .pagination .page-link {
+           color: #667eea;
+           border: none;
+           margin: 0 5px;
+           border-radius: 10px;
+           transition: all 0.3s ease;
+       }
+       .pagination .page-link:hover {
+           background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+           color: white;
+       }
+       .quantity-selector {
+           display: flex;
+           align-items: center;
+           gap: 10px;
+           margin: 15px 0;
+       }
+       .quantity-btn {
+           width: 35px;
+           height: 35px;
+           border-radius: 50%;
+           border: 2px solid #667eea;
+           background: white;
+           color: #667eea;
+           font-weight: bold;
+           cursor: pointer;
+           transition: all 0.3s ease;
+       }
+       .quantity-btn:hover {
+           background: #667eea;
+           color: white;
+       }
+       .quantity-input {
+           width: 50px;
+           text-align: center;
+           border: 2px solid #667eea;
+            border-radius: 8px;
+           padding: 5px;
+           font-weight: bold;
+       }
+       .cart-sidebar {
+           position: fixed;
+           top: 0;
+           right: -400px;
+           width: 400px;
+           height: 100vh;
+           background: white;
+           box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+           z-index: 1050;
+           transition: right 0.4s ease;
+           padding: 20px;
+           overflow-y: auto;
+       }
+       .cart-sidebar.open {
+           right: 0;
+       }
+       .cart-overlay {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: rgba(0,0,0,0.5);
+           z-index: 1040;
+           display: none;
+       }
+       .cart-overlay.open {
+           display: block;
+       }
+       .cart-item {
+           display: flex;
+           align-items: center;
+           padding: 15px;
+           border-bottom: 1px solid #eee;
+           transition: background 0.3s ease;
+       }
+       .cart-item:hover {
+           background: #f8f9fa;
+       }
+       .cart-item img {
+           width: 80px;
+           height: 60px;
+           object-fit: cover;
+           border-radius: 8px;
+           margin-right: 15px;
+       }
+       .cart-total {
+           background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+           color: white;
+           padding: 20px;
+           border-radius: 15px;
+           margin-top: 20px;
+       }
+       .feature-badge {
+           position: absolute;
+           top: 10px;
+           right: 10px;
+           background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%);
+           color: white;
+           padding: 5px 15px;
+           border-radius: 20px;
+           font-size: 12px;
+           font-weight: bold;
+           z-index: 10;
+       }
+   </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="bmw.jpg" alt="BMW logo" style="width: 80px;" height="80px" class="rounded-pill">
+            </a>
+            <button class="navbar-toggler" type="button"   data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-info-circle me-1"></i>About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-envelope me-1"></i>Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user me-1"></i>Login</a>
+                </li>
+                <li class="nav-item d-md-none mt-2">
+                    <form class="d-flex" style="max-width: 200px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search..." style="border-radius: 25px 0 0 25px; border: none;">
+                            <button class="btn btn-light" type="submit" style="border-radius: 0 25px 25px 0;">
+                                <i class="fas fa-search text-primary"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+
+            <form class="d-flex me-3 d-none d-md-flex" style="max-width: 300px;">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search products..." style="border-radius: 25px 0 0 25px; border: none;">
+                    <button class="btn btn-light" type="submit" style="border-radius: 0 25px 25px 0;">
+                        <i class="fas fa-search text-primary"></i>
+                    </button>
+                </div>
+            </form>
+
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link cart-icon" onclick="toggleCart()">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+    </nav>
+
+    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+       <div class="carousel-inner">
+           <div class="carousel-item active" data-bs-interval="4000">
+            <img src="bmw21.jpg" class="d-block w-100" alt="..." height="650px">
+           </div>
+
+           <div class="carousel-item " data-bs-interval="3000">
+            
+            <img src="bmwyellow.jpg" class="d-block w-100" alt="..."height="650px">
+           </div>
+
+           <div class="carousel-item " data-bs-interval="3000">
+
+            <img src="bmwblack.jpg" class="d-block w-100" alt="..." height="650px">
+           </div>
+
+           <div class="carousel-item " data-bs-interval="3000">
+
+            <img src="bmwblue.jpg" class="d-block w-100" alt="..." height="650px">
+           </div>
+
+           <div class="carousel-item " data-bs-interval="2000" >
+
+            <img src="bmwwhite.jpg" class="d-block w-100" alt="..." height="650px">
+           </div>
+           
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+    
+</div>
+<!--Button to open modal-->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Mymodal">
+    Open modal
+</button>
+
+<!-- The modal-->
+ <div class="modal" id="Mymodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+             <!--Modal Header-->
+             <div class="modal-header">
+                <h4 class="modal-title">Customer Details</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+             </div>
+
+             <!--Modal Body-->
+             <div class="modal-body">
+                 <form>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name:</label>
+                        <input type="text" class="form-control"
+                               id="name" placeholder="Enter your name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control"
+                               id="email" placeholder="Enter your email">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone:</label>
+                        <input type="tel" class="form-control"
+                               id="phone" placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control"
+                               id="password" placeholder="Enter your password">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Gender:</label><br>
+
+                        <input type="radio" name="gender" id="male">
+                        <label for="male">Male</label>
+
+                        <input type="radio" name="gender" id="female">
+                        <label for="female">Female</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City:</label>
+                        <select class="form-select" id="city">
+                            <option>Select City</option>
+                            <option>Mumbai</option>
+                            <option>Pune</option>
+                            <option>Delhi</option>
+                            <option>Bangalore</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message:</label>
+                        <textarea class="form-control"
+                                  id="message"
+                                  rows="3"></textarea>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               id="terms">
+
+                        <label class="form-check-label" for="terms">
+                            I agree to the terms and conditions
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+
+                    <button type="reset" class="btn btn-secondary">
+                        Reset
+                    </button>
+
+                </form>
+             </div>
+            
+              <!--Modal footer-->
+               <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+               </div>
+           </div>
+        </div>
+ </div>
+
+    </div>
+    <div class="container">
+        <h1  class="text-center mb-4">BMW </h1>
+        
+        <p>
+            Bayerische Motoren Werke AG,[4] trading as BMW Group (commonly abbreviated to BMW (German pronunciation: [ˌbeːʔɛmˈveː] ⓘ), sometimes anglicised as Bavarian Motor Works), is a German multinational conglomerate manufacturer of luxury vehicles and motorcycles headquartered in Munich, Germany. The moniker "BMW " first came into use when the German firm Rapp Motorenwerke changed its name to Bayerische Motoren Werke GmbH (BMW GmbH) in 1917. Thereafter, in 1922, the name and assets of BMW GmbH were transferred to the aircraft manufacturer Bayerische Flugzeugwerke AG (formerly Otto Flugmaschinenfabrik), thereby giving rise to the company known today as BMW AG.[5][6]
+
+BMW AG's automobiles are marketed under the BMW, Mini, and Rolls-Royce brands while its motorcycles are marketed under the BMW Motorrad brand. In 2023, BMW became the world's ninth-largest producer of motor vehicles (with 2,555,341 vehicles made in that year alone)[7] as well as the 6th largest automaker by revenue.[8] In 2023, it was ranked 46th in the Forbes Global 2000.[9] The company also has significant motor-sport history, especially in touring cars, sports cars, and the Isle of Man TT. BMW initially focused on aircraft engine production during World War I, a legacy that influenced the company's engineering emphasis on performance and precision. Known as "The Ultimate Driving Machine", the brand is celebrated for engineering vehicles that blend high-end luxury with sharp, driver-focused performance. Following postwar restrictions on aircraft manufacturing, BMW diversified into motorcycle production in the 1920s and later entered the automobile market, establishing itself as a major player in the automotive industry.
+
+BMW AG is headquartered in Munich and produces motor vehicles in Germany, United Kingdom, United States, Brazil, Mexico, South Africa, India, and China.[10] The Quandt family [de] is a long-term shareholder of the company, following investments by the brothers Herbert and Harald Quandt in 1959 which saved BMW from bankruptcy, with remaining shares owned by the public.
+
+History
+Main article: History of BMW
+BMW traces its origins to aircraft engine manufacturer Otto Flugmaschinenfabrik, founded in 1910 by Gustav Otto in the Kingdom of Bavaria, German Empire. On 18 August 1916, the firm was reorganized as Bayerische Flugzeugwerke (BFW). In 1922, BFW was renamed Bayerische Motoren Werke (BMW).
+
+The name BMW, however, had earlier been used by a company founded in 1913 by Karl Rapp as Rapp Motorenwerke. In 1922, the name and engine-production assets of Rapp Motorenwerke were transferred to Bayerische Flugzeugwerke, which adopted the BMW name in the same year.
+
+BMW's first products were aircraft engines for the Luftstreitkräfte. One of its early designs was the BMW IIIa, a straight-six engine developed in 1917 by engineer Max Friz. After World War I, BMW diversified into the production of motorcycle engines, agricultural equipment, household items, and railway brakes. In 1923, the company introduced its first motorcycle, the BMW R32.
+
+BMW became an automobile manufacturer in 1928 following its acquisition of Fahrzeugfabrik Eisenach, which produced the Austin 7 under licence from Austin Motor Company, marketed as the Dixi. The first car sold as a BMW was the BMW 3/15, a rebadged version of the Dixi. During the 1930s, BMW expanded its product range to include sports cars and larger luxury vehicles.
+
+Aircraft engines, motorcycles, and automobiles would be BMW's main products until World War II. During the war, BMW concentrated on building the BMW 801 aircraft engine using as many as 40,000 slave laborers.[11] These consisted primarily of prisoners from Nazi concentration camps, most prominently Dachau. Motorcycles remained as a side-line and automobile manufacture ceased altogether.
+
+BMW's factories were heavily bombed during the war and its remaining West German facilities were banned from producing motor vehicles or aircraft after the war. The company survived by making pots, pans, and bicycles. In 1948, BMW restarted motorcycle production. BMW resumed car production in Bavaria in 1952 with the BMW 501 luxury saloon. The range of cars was expanded in 1955, through the production of the cheaper Isetta microcar under licence. Slow sales of luxury cars and small profit margins from microcars, meant BMW was in serious financial trouble and in 1959 the company was nearly taken over by rival Daimler-Benz.
+
+        </p>
+ </div>
+    <div class="container-fluid">
+        <h1>This is example two of Bootstrap</h1>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ad, provident tenetur ea adipisci autem dolores ab maiores molestias fugit aliquid illum nostrum deleniti reiciendis at voluptatibus ullam ipsam dolorum delectus.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam dicta fuga illo expedita ratione quia voluptate! Dicta aut nihil repudiandae quam distinctio atque saepe nostrum cumque quos reiciendis. Natus, asperiores!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae velit incidunt iure! Similique libero ipsum vitae ipsa obcaecati, saepe accusamus et iusto nisi sunt fugiat repudiandae. Quod nulla deserunt quibusdam!
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam a perferendis quia, dolorum vero harum accusantium reprehenderit natus praesentium non quod libero illum quas hic sed, voluptate aut necessitatibus nostrum.
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque sapiente provident dolores odio incidunt dolor iusto! Voluptate adipisci error delectus facere tempora atque inventore neque. Repellat a accusantium minima nisi?
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident quam inventore, sequi sapiente enim temporibus quas animi ab labore veniam atque doloribus eum sunt excepturi fugit nihil mollitia, quo vitae!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit reiciendis quae perspiciatis alias dolorem blanditiis praesentium veniam nam iste sapiente architecto, rem atque soluta cumque sed adipisci ullam ab autem.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium nihil animi nesciunt, voluptatem aliquam perferendis natus sequi fugit ipsa culpa ad consequatur voluptates incidunt autem pariatur tempora, ipsum itaque quidem.
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore ducimus, incidunt quibusdam, id eius adipisci debitis ipsam atque tenetur vel, fugiat assumenda cumque et maxime quos velit facere dicta deleniti!
+        </p>
+    </div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4"> Products Cards</h2>
+    <div class="row">
+  <div class="col-md-3 mb-3">
+
+      <div class="card shadow">
+        <span class="feature-badge">HOT</span>
+        <img src="bmwblack.jpg" class="card-img-top" alt="Car" width="50px" height="200px">
+        <div class="card-body">
+
+            <h5 class="card-title">BMW M4 Competition</h5>
+
+            <p class="card-text">
+                Sports car with great color and looks.
+            </p>
+
+            <h5 class="price-tag">$400k</h5>
+
+            <div class="quantity-selector">
+                <button class="quantity-btn" onclick="decreaseQuantity('product1')">-</button>
+                <input type="number" class="quantity-input" id="quantity-product1" value="1" min="1" max="10">
+                <button class="quantity-btn" onclick="increaseQuantity('product1')">+</button>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" onclick="addToCart('BMW M4 Competition', 400000, 'bmwblack.jpg', 'product1')">
+                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                </button>
+                <a href="#" class="btn btn-success">
+                    <i class="fas fa-bolt me-2"></i>Buy Now
+                </a>
+            </div>
+        </div>
+       </div>
+   </div>
+
+   <div class="col-md-3 mb-3">
+
+      <div class="card shadow">
+        <span class="feature-badge">NEW</span>
+        <img src="bmwblue.jpg" class="card-img-top" alt="Car" width="50px" height="200px">
+        <div class="card-body">
+
+            <h5 class="card-title">BMW M4 xDrive Coupe</h5>
+
+            <p class="card-text">
+                Sports car with great color and looks.
+            </p>
+
+            <h5 class="price-tag">$380k</h5>
+
+            <div class="quantity-selector">
+                <button class="quantity-btn" onclick="decreaseQuantity('product2')">-</button>
+                <input type="number" class="quantity-input" id="quantity-product2" value="1" min="1" max="10">
+                <button class="quantity-btn" onclick="increaseQuantity('product2')">+</button>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" onclick="addToCart('BMW M4 xDrive Coupe', 380000, 'bmwblue.jpg', 'product2')">
+                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                </button>
+                <a href="#" class="btn btn-success">
+                    <i class="fas fa-bolt me-2"></i>Buy Now
+                </a>
+            </div>
+        </div>
+       </div>
+   </div>
+
+   <div class="col-md-3 mb-3">
+
+      <div class="card shadow">
+        <span class="feature-badge">PREMIUM</span>
+        <img src="bmwyellow.jpg" class="card-img-top" alt="Car" width="150px" height="200px">
+        <div class="card-body">
+
+            <h5 class="card-title">BMW M4 Coupe</h5>
+
+            <p class="card-text">
+                Sports car with great color and looks.
+            </p>
+
+            <h5 class="price-tag">$500k</h5>
+
+            <div class="quantity-selector">
+                <button class="quantity-btn" onclick="decreaseQuantity('product3')">-</button>
+                <input type="number" class="quantity-input" id="quantity-product3" value="1" min="1" max="10">
+                <button class="quantity-btn" onclick="increaseQuantity('product3')">+</button>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" onclick="addToCart('BMW M4 Coupe', 500000, 'bmwyellow.jpg', 'product3')">
+                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                </button>
+                <a href="#" class="btn btn-success">
+                    <i class="fas fa-bolt me-2"></i>Buy Now
+                </a>
+            </div>
+        </div>
+       </div>
+   </div>
+<div class="col-md-3 mb-3">
+
+      <div class="card shadow">
+        <span class="feature-badge">SALE</span>
+        <img src="bmwwhite.jpg" class="card-img-top" alt="Car" width="150px" height="200px">
+        <div class="card-body">
+
+            <h5 class="card-title">BMW M4 Competition</h5>
+
+            <p class="card-text">
+                Sports car with great color and looks.
+            </p>
+            <h5 class="price-tag">$360k</h5>
+
+            <div class="quantity-selector">
+                <button class="quantity-btn" onclick="decreaseQuantity('product4')">-</button>
+                <input type="number" class="quantity-input" id="quantity-product4" value="1" min="1" max="10">
+                <button class="quantity-btn" onclick="increaseQuantity('product4')">+</button>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" onclick="addToCart('BMW M4 Competition', 360000, 'bmwwhite.jpg', 'product4')">
+                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                </button>
+                <a href="#" class="btn btn-success">
+                    <i class="fas fa-bolt me-2"></i>Buy Now
+                </a>
+            </div>
+        </div>
+       </div>
+   </div>
+</div>
+
+
+<ul class="pagination">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+</ul>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cart-sidebar">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Your Cart</h3>
+        <button class="btn btn-close" onclick="toggleCart()"></button>
+    </div>
+
+    <div id="cart-items">
+        <div class="text-center py-5">
+            <i class="fas fa-shopping-basket fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Your cart is empty</p>
+        </div>
+    </div>
+
+    <div class="cart-total" id="cart-total-section" style="display: none;">
+        <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <span id="subtotal">$0</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+            <span>Tax (10%):</span>
+            <span id="tax">$0</span>
+        </div>
+        <div class="d-flex justify-content-between fw-bold">
+            <span>Total:</span>
+            <span id="total">$0</span>
+        </div>
+        <button class="btn btn-light w-100 mt-3 fw-bold" onclick="checkout()">
+            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+        </button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let cart = [];
+
+    function increaseQuantity(productId) {
+        const input = document.getElementById(`quantity-${productId}`);
+        if (parseInt(input.value) < 10) {
+            input.value = parseInt(input.value) + 1;
+        }
+    }
+
+    function decreaseQuantity(productId) {
+        const input = document.getElementById(`quantity-${productId}`);
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+
+    function addToCart(name, price, image, productId) {
+        const quantity = parseInt(document.getElementById(`quantity-${productId}`).value);
+        const existingItem = cart.find(item => item.name === name);
+
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({
+                name: name,
+                price: price,
+                image: image,
+                quantity: quantity
+            });
+        }
+
+        updateCartUI();
+        showNotification(`${name} added to cart!`);
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const cartItems = document.getElementById('cart-items');
+        const cartCount = document.getElementById('cart-count');
+        const cartTotalSection = document.getElementById('cart-total-section');
+
+        cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = `
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-basket fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Your cart is empty</p>
+                </div>
+            `;
+            cartTotalSection.style.display = 'none';
+        } else {
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">${item.name}</h6>
+                        <p class="mb-1 text-success">$${(item.price / 1000).toFixed(0)}k</p>
+                        <small>Quantity: ${item.quantity}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.1;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = `$${(subtotal / 1000).toFixed(0)}k`;
+            document.getElementById('tax').textContent = `$${(tax / 1000).toFixed(0)}k`;
+            document.getElementById('total').textContent = `$${(total / 1000).toFixed(0)}k`;
+            cartTotalSection.style.display = 'block';
+        }
+    }
+
+    function toggleCart() {
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        cartSidebar.classList.toggle('open');
+        cartOverlay.classList.toggle('open');
+    }
+
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'position-fixed top-0 end-0 p-3';
+        notification.style.zIndex = '1100';
+        notification.innerHTML = `
+            <div class="toast show" role="alert">
+                <div class="toast-header bg-success text-white">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <strong class="me-auto">Success</strong>
+                    <button type="button" class="btn-close btn-close-white" onclick="this.parentElement.parentElement.parentElement.remove()"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    function checkout() {
+        if (cart.length > 0) {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.1;
+            alert(`Proceeding to checkout with total: $${(total / 1000).toFixed(0)}k\n\nThis would redirect to a payment page in a real application.`);
+        }
+    }
+</script>
+</body>
+</html>
